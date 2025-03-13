@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.Socket;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -55,22 +52,32 @@ public class JavaTcpClient {
 
         System.out.println("JAVA TCP CLIENT");
         String hostName = "localhost";
+        String multicastAddress = "231.0.0.1";
+
         int portNumber = 12345;
+        int multicastPort = 25565;
         Socket socket = null;
         DatagramSocket udpSocket = null;
+        MulticastSocket multicastSocket=null;
 
 
         try {
             socket = new Socket(hostName, portNumber);
             udpSocket = new DatagramSocket();
+            multicastSocket = new MulticastSocket(multicastPort);
+
             InetAddress address = InetAddress.getByName("localhost");
+            InetAddress multicastGroup = InetAddress.getByName(multicastAddress);
+            multicastSocket.joinGroup(new InetSocketAddress(multicastGroup, multicastPort), NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
 
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             Thread tcpReceiveMsg = new Thread(new TcpReceiveMsg(in));
             Thread udpReceivedMsg = new Thread(new UdpReceiveMsg(udpSocket));
+            Thread multicastReceiveMsg = new Thread( new MulticastReceiveMsg(multicastSocket));
 
+            multicastReceiveMsg.start();
             udpReceivedMsg.start();
             tcpReceiveMsg.start();
             String msg;
@@ -84,7 +91,7 @@ public class JavaTcpClient {
                     DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.getBytes().length, address, portNumber);
                     udpSocket.send(packet);
                     break;
-                } else if (msg.equals("U")) {
+                } else if (msg.equals("U") || msg.equals("M")) {
                     System.out.println("Choose ASCII Art (1-4):");
                     int number;
                     while (true) {
@@ -93,9 +100,13 @@ public class JavaTcpClient {
                         if (!input.isEmpty() && input.matches("[1-5]")) {
                             number = Integer.parseInt(input);
                             byte[] sendBuffer = ASCII_ARTS.get(number - 1).getBytes(StandardCharsets.UTF_8);
-                            int maxPacketSize = 4096;
-                            DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, address, portNumber);
-                            udpSocket.send(sendPacket);
+                            if(msg.equals("U")) {
+                                DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, address, portNumber);
+                                udpSocket.send(sendPacket);
+                            }else {
+                                DatagramPacket sendPacket = new DatagramPacket(sendBuffer,sendBuffer.length, multicastGroup, multicastPort);
+                                multicastSocket.send(sendPacket);
+                            }
                             break;
                         }
                     }

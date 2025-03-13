@@ -20,6 +20,7 @@ public class UdpReceiveMsg implements Runnable {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 udpSocket.receive(packet);
                 String receivedMsg = new String(packet.getData(), 0, packet.getLength(), StandardCharsets.UTF_8);
+                System.out.println("UDP Channel: ");
                 System.out.println(receivedMsg.trim());
             }
         } catch (IOException e) {
