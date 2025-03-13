@@ -87,9 +87,13 @@ public class JavaTcpClient {
             while (true) {
                 msg = userInput.readLine();
                 if (msg.equals("/q")) {
-                    out.println(msg);
-                    DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.getBytes().length, address, portNumber);
-                    udpSocket.send(packet);
+                    if (out != null) {
+                        out.println(msg);
+                    }
+                    if (udpSocket != null) {
+                        DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg.getBytes().length, address, portNumber);
+                        udpSocket.send(packet);
+                    }
                     break;
                 } else if (msg.equals("U") || msg.equals("M")) {
                     System.out.println("Choose ASCII Art (1-4):");
@@ -114,6 +118,9 @@ public class JavaTcpClient {
                     out.println(msg);
                 }
             }
+            tcpReceiveMsg.interrupt();
+            udpReceivedMsg.interrupt();
+            multicastReceiveMsg.interrupt();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -122,6 +129,10 @@ public class JavaTcpClient {
             }
             if (udpSocket != null) {
                 udpSocket.close();
+            }
+            if (multicastSocket != null && !multicastSocket.isClosed()) {
+                multicastSocket.leaveGroup(new InetSocketAddress(multicastAddress, multicastPort), NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
+                multicastSocket.close();
             }
         }
     }
