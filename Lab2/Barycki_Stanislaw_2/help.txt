@@ -1,0 +1,47 @@
+dev:
+uvicorn main:app --reload
+production:
+venv\Scripts\activate.bat
+uvicorn app:app --host 0.0.0.0 --port 8000 --workers 4
+
+test:
+{
+  "types": "books",
+  "authors": "Adam Asnyk",
+  "epochs": "Pozytywizm",
+  "genres": "Tragedia",
+  "kinds": "Dramat"
+}
+2 ksiązki
+{
+  "types": "audiobooks",
+  "authors": "Adam Asnyk",
+  "epochs": "Pozytywizm",
+  "genres": "Tragedia",
+  "kinds": "Dramat"
+}
+0 audiobooków
+brak jednego pola w body
+{
+  "types": "books",
+  "authors": "Adam Asnyk",
+  "epochs": "Pozytywizm",
+  "genres": "Tragedia",
+}
+bład 422
+zły typ
+{
+  "types": 0,
+  "authors": "Adam Asnyk",
+  "epochs": "Pozytywizm",
+  "genres": "Tragedia",
+  "kinds": "Drama"
+}
+{
+  "types": "ffff",
+  "authors": "Adam Asnyk",
+  "epochs": "Pozytywizm",
+  "genres": "Tragedia",
+  "kinds": "Drama"
+}
+400 bo musi być albo audiobook albo book

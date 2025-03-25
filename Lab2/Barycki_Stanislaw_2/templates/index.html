@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Wyszukiwarka Książek</title>
+</head>
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .card{
+        display: flex;
+        flex-direction: row;
+        margin: 20px;
+        border: 1px solid black;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+
+        box-shadow: 11px 10px 15px 1px rgba(0,0,0,0.67);
+        transform: scale(1.01);
+    }
+    .cardBody{
+        margin: 5px;
+    }
+</style>
+<body>
+<h2>Wyszukaj <książki></książki></h2>
+<h3>Zostaw daną komórkę pustą jeżeli nie zależy ci na konkretnym wyborze</h3>
+<form id="search">
+    <label>Wyszukaj książkę lub audiobook</label>
+    <label for="types">Wybierz format:</label>
+    <select id="types" name="types">
+        <option value="books">Książka</option>
+        <option value="audiobooks">Audiobook</option>
+    </select>
+    <label for="authors">Wybierz autora:</label>
+    <select id="authors" name="authors"></select>
+
+    <label for="epochs">Wybierz epokę literacką:</label>
+    <select id="epochs" name="epochs"></select>
+
+    <label for="genres">Wybierz gatunek literacki:</label>
+    <select id="genres" name="genres"></select>
+
+    <label for="kinds">Wybierz rodzaj literacki:</label>
+    <select id="kinds" name="kinds"></select>
+
+    <input type="submit" name="Szukaj"></input>
+</form>
+<div id="result"></div>
+<script>
+    const API_KEY = "nie_chce_mi_sie_robic_jwt_albo_auth_albo_https"
+    async function getOption(url, id) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Błąd: ${response.status}`);
+
+            const data = await response.json();
+            const select = document.getElementById(id);
+
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item;
+                option.textContent = item;
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error(`Błąd ładowania ${id}:`, error);
+        }
+    }
+    getOption('/authors', 'authors');
+    getOption('/epochs', 'epochs');
+    getOption('/genres', 'genres');
+    getOption('/kinds', 'kinds');
+
+    document.getElementById("search").addEventListener("submit",async function (event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        const jsonData = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch("/search", {
+                method: "POST",
+                headers: {"Content-Type": "application/json",
+                    "x-api-key":API_KEY},
+                body: JSON.stringify(jsonData)
+            });
+
+            if (!response.ok) throw new Error(`Błąd: ${response.status}`);
+
+            const data = await response.json();
+            console.log(data);
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "";
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "card";
+                const img = document.createElement('img');
+                img.src = item.cover;
+                card.appendChild(img);
+                const cardBody = document.createElement('div');
+                cardBody.className ="cardBody"
+                const h2 = document.createElement('h2');
+                h2.textContent = "Title: "+item.title;
+                const h3 = document.createElement('h3');
+                h3.textContent = "Author: "+item.author;
+                const genres = document.createElement('h4');
+                genres.textContent = "Gatunki literackie: "+item.genres.join(", ");
+                const kind = document.createElement('h4');
+                kind.textContent = "Rodzaj literacki: "+item.kind
+                const epoch = document.createElement('h4');
+                epoch.textContent = "Epoka literacka: "+ item.epoch;
+                cardBody.appendChild(h2);
+                cardBody.appendChild(h3);
+                cardBody.appendChild(genres);
+                cardBody.appendChild(kind)
+                cardBody.appendChild(epoch)
+                card.appendChild(cardBody);
+                resultDiv.appendChild(card);
+            })
+        } catch (error) {
+            console.error("Błąd wyszukiwania:", error);
+            document.getElementById("result").innerHTML = "<p>Błąd wyszukiwania. Spróbuj ponownie.</p>";
+        }
+    });
+</script>
+</body>
+
+</html>
