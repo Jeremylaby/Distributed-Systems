@@ -28,7 +28,7 @@ public class IceClient {
 			ObjectPrx base2 = communicator.stringToProxy("calc/calc33:tcp -h 127.0.0.2 -p 10000 -z : udp -h 127.0.0.2 -p 10000 -z");
 			// 3. Rzutowanie, zawężanie (do typu Calc)
 			CalcPrx obj1 = CalcPrx.checkedCast(base1);
-			CalcPrx obj2 = CalcPrx.checkedCast(base1);
+			CalcPrx obj2 = CalcPrx.checkedCast(base2);
 			//CalcPrx obj1 = CalcPrx.uncheckedCast(base1); //na czym polega różnica?
 			if (obj1 == null) throw new Error("Invalid proxy");
 			if (obj2 == null) throw new Error("Invalid proxy");
