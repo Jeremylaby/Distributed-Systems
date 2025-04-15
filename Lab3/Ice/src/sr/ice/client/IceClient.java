@@ -24,8 +24,8 @@ public class IceClient {
 			//ObjectPrx base1 = communicator.propertyToProxy("Calc1.Proxy");
 
 			// 2. Uzyskanie referencji obiektu - to samo co powyżej, ale mniej ładnie
-			ObjectPrx base1 = communicator.stringToProxy("calc/calc11:tcp -h 127.0.0.2 -p 10000 -z : udp -h 127.0.0.2 -p 10000 -z"); //opcja -z włącza możliwość kompresji wiadomości
-			ObjectPrx base2 = communicator.stringToProxy("calc/calc33:tcp -h 127.0.0.2 -p 10000 -z : udp -h 127.0.0.2 -p 10000 -z");
+			ObjectPrx base1 = communicator.stringToProxy("calc/calc11:tcp -h 192.168.3.55 -p 10000 -z : udp -h 192.168.3.55 -p 10000 -z"); //opcja -z włącza możliwość kompresji wiadomości
+			ObjectPrx base2 = communicator.stringToProxy("calc/calc33:tcp -h 192.168.3.55 -p 10000 -z : udp -h 192.168.3.55 -p 10000 -z");
 			// 3. Rzutowanie, zawężanie (do typu Calc)
 			CalcPrx obj1 = CalcPrx.checkedCast(base1);
 			CalcPrx obj2 = CalcPrx.checkedCast(base2);
