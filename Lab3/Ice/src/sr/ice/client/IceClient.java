@@ -57,7 +57,7 @@ public class IceClient {
                             break;
                         case "avg":
                             try {
-                                long[] numbers = {};
+                                long[] numbers = {4,4,5,5,6};
                                 double result = obj1.avg(numbers);
                                 System.out.println("RESULT = " + result);
                             } catch (NoInput e) {
