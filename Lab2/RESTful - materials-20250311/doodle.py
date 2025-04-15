@@ -24,7 +24,6 @@ def create_poll(poll: Poll):
             content={"error": "Poll already exists"}
         )
 
-    # Inicjalizacja głosów na 0 dla każdej opcji
     poll.votes = {option: 0 for option in poll.options}
     polls[poll.id] = poll
 

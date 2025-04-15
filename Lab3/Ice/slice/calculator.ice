@@ -5,6 +5,7 @@
 module Demo
 {
   enum operation { MIN, MAX, AVG };
+  sequence<long> LongSeq;
   
   exception NoInput {};
 
@@ -18,8 +19,9 @@ module Demo
 
   interface Calc
   {
-    long add(int a, int b);
-    long subtract(int a, int b);
+    idempotent long add(int a, int b);
+    idempotent long subtract(int a, int b);
+    idempotent double avg(LongSeq numbers) throws NoInput;
     void op(A a1, short b1); //załóżmy, że to też jest operacja arytmetyczna ;)
   };
 

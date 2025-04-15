@@ -2,6 +2,7 @@ package sr.ice.server;
 
 import Demo.A;
 import Demo.Calc;
+import Demo.NoInput;
 import com.zeroc.Ice.Current;
 
 public class CalcI implements Calc {
@@ -45,6 +46,18 @@ public class CalcI implements Calc {
 		}
 
 		return a - b;
+	}
+
+	@Override
+	public double avg(long[] numbers, Current current) throws NoInput {
+		if (numbers.length == 0) {
+			throw new NoInput();
+		}
+		double sum = 0;
+		for(long number : numbers) {
+			sum += number;
+		}
+		return sum / numbers.length;
 	}
 
 
