@@ -2,6 +2,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 
 import sr.proto.AddressBookProtos.Person;
 
@@ -32,6 +33,7 @@ public class ProtoSerialization {
                                 Person.PhoneNumber.newBuilder()
                                         .setNumber("+48-699-989-796")
                                         .setType(Person.PhoneType.MOBILE))
+                        .addAllFavouriteFloatNumbers(List.of(6.66f, 21.15f, 4.20f))
                         .build();
 
         byte[] personSer = null;

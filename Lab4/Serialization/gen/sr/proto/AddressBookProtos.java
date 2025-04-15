@@ -88,6 +88,23 @@ public final class AddressBookProtos {
      */
     sr.proto.AddressBookProtos.Person.PhoneNumberOrBuilder getPhonesOrBuilder(
         int index);
+
+    /**
+     * <code>repeated float favouriteFloatNumbers = 6;</code>
+     * @return A list containing the favouriteFloatNumbers.
+     */
+    java.util.List<java.lang.Float> getFavouriteFloatNumbersList();
+    /**
+     * <code>repeated float favouriteFloatNumbers = 6;</code>
+     * @return The count of favouriteFloatNumbers.
+     */
+    int getFavouriteFloatNumbersCount();
+    /**
+     * <code>repeated float favouriteFloatNumbers = 6;</code>
+     * @param index The index of the element to return.
+     * @return The favouriteFloatNumbers at the given index.
+     */
+    float getFavouriteFloatNumbers(int index);
   }
   /**
    * Protobuf type {@code tutorial.Person}
@@ -114,6 +131,7 @@ public final class AddressBookProtos {
       name_ = "";
       email_ = "";
       phones_ = java.util.Collections.emptyList();
+      favouriteFloatNumbers_ = emptyFloatList();
     }
 
     public static final com.google.protobuf.Descriptors.Descriptor
@@ -1011,6 +1029,36 @@ public final class AddressBookProtos {
       return phones_.get(index);
     }
 
+    public static final int FAVOURITEFLOATNUMBERS_FIELD_NUMBER = 6;
+    @SuppressWarnings("serial")
+    private com.google.protobuf.Internal.FloatList favouriteFloatNumbers_ =
+        emptyFloatList();
+    /**
+     * <code>repeated float favouriteFloatNumbers = 6;</code>
+     * @return A list containing the favouriteFloatNumbers.
+     */
+    @java.lang.Override
+    public java.util.List<java.lang.Float>
+        getFavouriteFloatNumbersList() {
+      return favouriteFloatNumbers_;
+    }
+    /**
+     * <code>repeated float favouriteFloatNumbers = 6;</code>
+     * @return The count of favouriteFloatNumbers.
+     */
+    public int getFavouriteFloatNumbersCount() {
+      return favouriteFloatNumbers_.size();
+    }
+    /**
+     * <code>repeated float favouriteFloatNumbers = 6;</code>
+     * @param index The index of the element to return.
+     * @return The favouriteFloatNumbers at the given index.
+     */
+    public float getFavouriteFloatNumbers(int index) {
+      return favouriteFloatNumbers_.getFloat(index);
+    }
+    private int favouriteFloatNumbersMemoizedSerializedSize = -1;
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -1025,6 +1073,7 @@ public final class AddressBookProtos {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      getSerializedSize();
       if (!com.google.protobuf.GeneratedMessage.isStringEmpty(name_)) {
         com.google.protobuf.GeneratedMessage.writeString(output, 1, name_);
       }
@@ -1039,6 +1088,13 @@ public final class AddressBookProtos {
       }
       for (int i = 0; i < phones_.size(); i++) {
         output.writeMessage(5, phones_.get(i));
+      }
+      if (getFavouriteFloatNumbersList().size() > 0) {
+        output.writeUInt32NoTag(50);
+        output.writeUInt32NoTag(favouriteFloatNumbersMemoizedSerializedSize);
+      }
+      for (int i = 0; i < favouriteFloatNumbers_.size(); i++) {
+        output.writeFloatNoTag(favouriteFloatNumbers_.getFloat(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1067,6 +1123,17 @@ public final class AddressBookProtos {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(5, phones_.get(i));
       }
+      {
+        int dataSize = 0;
+        dataSize = 4 * getFavouriteFloatNumbersList().size();
+        size += dataSize;
+        if (!getFavouriteFloatNumbersList().isEmpty()) {
+          size += 1;
+          size += com.google.protobuf.CodedOutputStream
+              .computeInt32SizeNoTag(dataSize);
+        }
+        favouriteFloatNumbersMemoizedSerializedSize = dataSize;
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
@@ -1093,6 +1160,8 @@ public final class AddressBookProtos {
               other.getIncomePercentage())) return false;
       if (!getPhonesList()
           .equals(other.getPhonesList())) return false;
+      if (!getFavouriteFloatNumbersList()
+          .equals(other.getFavouriteFloatNumbersList())) return false;
       if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
@@ -1116,6 +1185,10 @@ public final class AddressBookProtos {
       if (getPhonesCount() > 0) {
         hash = (37 * hash) + PHONES_FIELD_NUMBER;
         hash = (53 * hash) + getPhonesList().hashCode();
+      }
+      if (getFavouriteFloatNumbersCount() > 0) {
+        hash = (37 * hash) + FAVOURITEFLOATNUMBERS_FIELD_NUMBER;
+        hash = (53 * hash) + getFavouriteFloatNumbersList().hashCode();
       }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
@@ -1259,6 +1332,7 @@ public final class AddressBookProtos {
           phonesBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000010);
+        favouriteFloatNumbers_ = emptyFloatList();
         return this;
       }
 
@@ -1317,6 +1391,10 @@ public final class AddressBookProtos {
         if (((from_bitField0_ & 0x00000008) != 0)) {
           result.incomePercentage_ = incomePercentage_;
         }
+        if (((from_bitField0_ & 0x00000020) != 0)) {
+          favouriteFloatNumbers_.makeImmutable();
+          result.favouriteFloatNumbers_ = favouriteFloatNumbers_;
+        }
       }
 
       @java.lang.Override
@@ -1372,6 +1450,17 @@ public final class AddressBookProtos {
               phonesBuilder_.addAllMessages(other.phones_);
             }
           }
+        }
+        if (!other.favouriteFloatNumbers_.isEmpty()) {
+          if (favouriteFloatNumbers_.isEmpty()) {
+            favouriteFloatNumbers_ = other.favouriteFloatNumbers_;
+            favouriteFloatNumbers_.makeImmutable();
+            bitField0_ |= 0x00000020;
+          } else {
+            ensureFavouriteFloatNumbersIsMutable();
+            favouriteFloatNumbers_.addAll(other.favouriteFloatNumbers_);
+          }
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
@@ -1432,6 +1521,23 @@ public final class AddressBookProtos {
                 }
                 break;
               } // case 42
+              case 53: {
+                float v = input.readFloat();
+                ensureFavouriteFloatNumbersIsMutable();
+                favouriteFloatNumbers_.addFloat(v);
+                break;
+              } // case 53
+              case 50: {
+                int length = input.readRawVarint32();
+                int limit = input.pushLimit(length);
+                int alloc = length > 4096 ? 4096 : length;
+                ensureFavouriteFloatNumbersIsMutable(alloc / 4);
+                while (input.getBytesUntilLimit() > 0) {
+                  favouriteFloatNumbers_.addFloat(input.readFloat());
+                }
+                input.popLimit(limit);
+                break;
+              } // case 50
               default: {
                 if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                   done = true; // was an endgroup tag
@@ -1895,6 +2001,96 @@ public final class AddressBookProtos {
           phones_ = null;
         }
         return phonesBuilder_;
+      }
+
+      private com.google.protobuf.Internal.FloatList favouriteFloatNumbers_ = emptyFloatList();
+      private void ensureFavouriteFloatNumbersIsMutable() {
+        if (!favouriteFloatNumbers_.isModifiable()) {
+          favouriteFloatNumbers_ = makeMutableCopy(favouriteFloatNumbers_);
+        }
+        bitField0_ |= 0x00000020;
+      }
+      private void ensureFavouriteFloatNumbersIsMutable(int capacity) {
+        if (!favouriteFloatNumbers_.isModifiable()) {
+          favouriteFloatNumbers_ = makeMutableCopy(favouriteFloatNumbers_, capacity);
+        }
+        bitField0_ |= 0x00000020;
+      }
+      /**
+       * <code>repeated float favouriteFloatNumbers = 6;</code>
+       * @return A list containing the favouriteFloatNumbers.
+       */
+      public java.util.List<java.lang.Float>
+          getFavouriteFloatNumbersList() {
+        favouriteFloatNumbers_.makeImmutable();
+        return favouriteFloatNumbers_;
+      }
+      /**
+       * <code>repeated float favouriteFloatNumbers = 6;</code>
+       * @return The count of favouriteFloatNumbers.
+       */
+      public int getFavouriteFloatNumbersCount() {
+        return favouriteFloatNumbers_.size();
+      }
+      /**
+       * <code>repeated float favouriteFloatNumbers = 6;</code>
+       * @param index The index of the element to return.
+       * @return The favouriteFloatNumbers at the given index.
+       */
+      public float getFavouriteFloatNumbers(int index) {
+        return favouriteFloatNumbers_.getFloat(index);
+      }
+      /**
+       * <code>repeated float favouriteFloatNumbers = 6;</code>
+       * @param index The index to set the value at.
+       * @param value The favouriteFloatNumbers to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFavouriteFloatNumbers(
+          int index, float value) {
+
+        ensureFavouriteFloatNumbersIsMutable();
+        favouriteFloatNumbers_.setFloat(index, value);
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated float favouriteFloatNumbers = 6;</code>
+       * @param value The favouriteFloatNumbers to add.
+       * @return This builder for chaining.
+       */
+      public Builder addFavouriteFloatNumbers(float value) {
+
+        ensureFavouriteFloatNumbersIsMutable();
+        favouriteFloatNumbers_.addFloat(value);
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated float favouriteFloatNumbers = 6;</code>
+       * @param values The favouriteFloatNumbers to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllFavouriteFloatNumbers(
+          java.lang.Iterable<? extends java.lang.Float> values) {
+        ensureFavouriteFloatNumbersIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, favouriteFloatNumbers_);
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated float favouriteFloatNumbers = 6;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFavouriteFloatNumbers() {
+        favouriteFloatNumbers_ = emptyFloatList();
+        bitField0_ = (bitField0_ & ~0x00000020);
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:tutorial.Person)
@@ -2712,15 +2908,16 @@ public final class AddressBookProtos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\014person.proto\022\010tutorial\"\357\001\n\006Person\022\014\n\004n" +
+      "\n\014person.proto\022\010tutorial\"\216\002\n\006Person\022\014\n\004n" +
       "ame\030\001 \001(\t\022\n\n\002id\030\002 \001(\005\022\r\n\005email\030\003 \001(\t\022\030\n\020" +
       "incomePercentage\030\004 \001(\001\022,\n\006phones\030\005 \003(\0132\034" +
-      ".tutorial.Person.PhoneNumber\032G\n\013PhoneNum" +
-      "ber\022\016\n\006number\030\001 \001(\t\022(\n\004type\030\002 \001(\0162\032.tuto" +
-      "rial.Person.PhoneType\"+\n\tPhoneType\022\n\n\006MO" +
-      "BILE\020\000\022\010\n\004HOME\020\001\022\010\n\004WORK\020\002\"/\n\013AddressBoo" +
-      "k\022 \n\006people\030\001 \003(\0132\020.tutorial.PersonB\035\n\010s" +
-      "r.protoB\021AddressBookProtosb\006proto3"
+      ".tutorial.Person.PhoneNumber\022\035\n\025favourit" +
+      "eFloatNumbers\030\006 \003(\002\032G\n\013PhoneNumber\022\016\n\006nu" +
+      "mber\030\001 \001(\t\022(\n\004type\030\002 \001(\0162\032.tutorial.Pers" +
+      "on.PhoneType\"+\n\tPhoneType\022\n\n\006MOBILE\020\000\022\010\n" +
+      "\004HOME\020\001\022\010\n\004WORK\020\002\"/\n\013AddressBook\022 \n\006peop" +
+      "le\030\001 \003(\0132\020.tutorial.PersonB\035\n\010sr.protoB\021" +
+      "AddressBookProtosb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -2731,7 +2928,7 @@ public final class AddressBookProtos {
     internal_static_tutorial_Person_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_tutorial_Person_descriptor,
-        new java.lang.String[] { "Name", "Id", "Email", "IncomePercentage", "Phones", });
+        new java.lang.String[] { "Name", "Id", "Email", "IncomePercentage", "Phones", "FavouriteFloatNumbers", });
     internal_static_tutorial_Person_PhoneNumber_descriptor =
       internal_static_tutorial_Person_descriptor.getNestedTypes().get(0);
     internal_static_tutorial_Person_PhoneNumber_fieldAccessorTable = new

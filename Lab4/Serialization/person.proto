@@ -23,6 +23,8 @@ message Person {
   }
 
   repeated PhoneNumber phones = 5;
+  repeated float favouriteFloatNumbers = 6;
+
 }
 
 message AddressBook {
