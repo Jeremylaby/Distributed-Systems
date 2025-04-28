@@ -1,0 +1,40 @@
+syntax = "proto3";
+package dynamic;
+
+import "google/protobuf/empty.proto";
+
+service ListManager {
+  rpc AddDigitToList(AddDigitRequest) returns (ListResponse);
+  rpc AddDigitToListStream(stream AddDigitRequest) returns (ListResponse);
+  rpc AddNumberToEach(AddNumberRequest) returns (ListResponse);
+  rpc Compute( OperationRequest ) returns ( OperationResponse );
+  rpc StreamList(google.protobuf.Empty) returns (stream ListElement);
+}
+enum OperationType {
+  SUM = 0;
+  MIN = 1;
+  MAX = 2;
+  AVG = 3;
+}
+message OperationResponse {
+  double result = 1;
+}
+message AddDigitRequest {
+  int32 digit = 1;
+}
+
+message AddNumberRequest {
+  int32 number = 1;
+}
+
+message ListResponse {
+  repeated int32 elements = 1;
+}
+
+message OperationRequest {
+  OperationType op = 1;
+}
+
+message ListElement {
+  int32 value = 1;
+}
