@@ -2,6 +2,8 @@ import sys
 
 import SmartHome
 import Ice
+
+
 def do_set_zoom(proxy):
     levels = [lvl for _, lvl in sorted(SmartHome.ZoomLevel._enumerators.items())]
     for i, lvl in enumerate(levels):
@@ -16,20 +18,30 @@ def do_set_zoom(proxy):
         print(f"Zoom ustawiony na {levels[idx]}")
     else:
         print("Indeks poza zakresem")
+
+
 lamp_commands = {
     "turnOn": lambda d: d.turnOn(),
     "turnOff": lambda d: d.turnOff()
 }
-
-rgb_lamp_commands = lamp_commands|{
-    "setColor" : lambda d: d.setColor(
-        int(input("R: ")), int(input("G: ")), int(input("B: "))
-    ),
+def do_set_color(d):
+    try:
+        R = int(input("R: "))
+        G = int(input("G: "))
+        B = int(input("B: "))
+    except ValueError:
+        print("Niepoprawna wartość koloru")
+        return
+    c = SmartHome.Color(R, G, B)
+    new_c = d.setColor(c)
+    print(f"Kolor ustawiony na (R={new_c.R}, G={new_c.G}, B={new_c.B})")
+rgb_lamp_commands = lamp_commands | {
+    "setColor": do_set_color,
     "getColor": lambda d: print(d.getColor())
 }
 
-camera_commands = lamp_commands|{
-    "move" : lambda d: d.move(
+camera_commands = lamp_commands | {
+    "move": lambda d: d.move(
         int(input("X: ")), int(input("Y: "))
     ),
     "getPosition": lambda d: print(d.getPosition()),
@@ -38,20 +50,20 @@ camera_commands = lamp_commands|{
     "getCameraSettings": lambda d: print(d.getCameraSettings())
 }
 
-nv_camera_commands = camera_commands|{
+nv_camera_commands = camera_commands | {
     "enableNightVision": lambda d: d.enableNightVision(),
     "disableNightVision": lambda d: d.disableNightVision(),
     "isNightVisionEnabled": lambda d: d.isNightVisionEnabled()
 }
 
-air_conditioning_commands = lamp_commands|{
+air_conditioning_commands = lamp_commands | {
     "getTemperatureSettings": lambda d: print(d.getTemperatureSettings()),
     "setTemperature": lambda d: d.setTemperature(
         int(input("T: "))
     )
 }
 
-air_conditioning_with_thermometer_commands = air_conditioning_commands|{
+air_conditioning_with_thermometer_commands = air_conditioning_commands | {
     "getRoomTemp": lambda d: print(d.getRoomTemp())
 }
 command_map = {
@@ -62,6 +74,7 @@ command_map = {
     "AirConditioning": air_conditioning_commands,
     "AirConditioningWithThermometer": air_conditioning_with_thermometer_commands
 }
+
 
 def display_commands(category, proxy):
     commands = command_map[category]
@@ -152,7 +165,7 @@ def main():
             for devices in device_lists
         ]
         while True:
-            if index==0:
+            if index == 0:
                 print("Adapter1:")
             else:
                 print("Adapter2:")
