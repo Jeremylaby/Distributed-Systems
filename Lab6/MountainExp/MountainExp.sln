@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminClient", "AdminClient\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupplierClient", "SupplierClient\SupplierClient.csproj", "{6A498580-1363-4AF8-AE2D-445ACA22D4D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cordinator", "Cordinator\Cordinator.csproj", "{23B2B61F-F445-4299-A3E2-0AE6A17B8B98}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamClient", "TeamClient\TeamClient.csproj", "{2E35F249-1FBD-4E07-88CD-CCEE3A37A1E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{F255777F-5422-4696-BFE7-58ACCF74B8E7}"
@@ -24,10 +22,6 @@ Global
 		{6A498580-1363-4AF8-AE2D-445ACA22D4D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A498580-1363-4AF8-AE2D-445ACA22D4D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A498580-1363-4AF8-AE2D-445ACA22D4D5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{23B2B61F-F445-4299-A3E2-0AE6A17B8B98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23B2B61F-F445-4299-A3E2-0AE6A17B8B98}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23B2B61F-F445-4299-A3E2-0AE6A17B8B98}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23B2B61F-F445-4299-A3E2-0AE6A17B8B98}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E35F249-1FBD-4E07-88CD-CCEE3A37A1E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E35F249-1FBD-4E07-88CD-CCEE3A37A1E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E35F249-1FBD-4E07-88CD-CCEE3A37A1E4}.Release|Any CPU.ActiveCfg = Release|Any CPU

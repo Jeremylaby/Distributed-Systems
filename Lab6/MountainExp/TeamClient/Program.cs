@@ -21,7 +21,12 @@ string teamQueue = $"team.{teamName}";
 
 await channel.QueueDeclareAsync(teamQueue, durable: false, exclusive: false, autoDelete: false);
 
-await channel.QueueDeclareAsync("coordinator_queue", false, false, false);
+await channel.ExchangeDeclareAsync("admin_log", ExchangeType.Fanout);
+
+// Exchange dla zamówień (routingKey = nazwa sprzętu)
+await channel.ExchangeDeclareAsync("orders_exchange", ExchangeType.Direct);
+
+await channel.BasicQosAsync(0, 1, false);
 
 string adminQueue = $"admin_teams_{teamName}";
 await channel.QueueDeclareAsync(adminQueue, false, false, false);
@@ -61,20 +66,31 @@ adminConsumer.ReceivedAsync += async (model, ea) =>
 
 await channel.BasicConsumeAsync(queue: adminQueue, autoAck: false, consumer: adminConsumer);
 
-var zamowienia = new[] { "tlen", "tlen", "buty", "buty", "plecak", "plecak" };
+var orders = new[] { "tlen", "tlen", "buty", "buty", "plecak", "plecak" };
 
-int id = 1;
-foreach (var sprzet in zamowienia)
+foreach (var eq in orders)
 {
     var order = new OrderMessage
     {
-        Equipment = sprzet,
-        TeamName = teamName
+        Equipment = eq,
+        TeamName = teamName,
+        OrderId = Guid.NewGuid().ToString().Substring(0, 6)
     };
+    var adminLog = new AdminLogMessage
+    {
+        Equipment = eq,
+        Reason = "Order",
+        Sender = teamName,
+        Target = "UNKNOWN",
+        OrderId = order.OrderId,
+    };
+    
+    var adminLogBody = SerializationHelper.Serialize(adminLog);
 
     var body = SerializationHelper.Serialize(order);
-    await channel.BasicPublishAsync(exchange: "", routingKey: "coordinator_queue", body: body);
-    Console.WriteLine($"[TEAM {teamName}] WYSŁANO ZAMÓWIENIE: {sprzet}");
+    await channel.BasicPublishAsync("orders_exchange", routingKey: eq, body: body);
+    Console.WriteLine($"[TEAM {teamName}] WYSŁANO ZAMÓWIENIE: {eq}");
+    await channel.BasicPublishAsync(exchange: "admin_log", routingKey: "", body: adminLogBody);
     Thread.Sleep(500);
 }
 

@@ -9,9 +9,11 @@ if (args.Length < 2)
     return;
 }
 
+//wczytanie argsów
 var supplierName = args[0];
 var supportedEquipment = args.Skip(1).ToList();
 
+//Inicializajca połączenia
 Console.WriteLine($"[SUPPLIER {supplierName}] Obsługiwane sprzęty: {string.Join(", ", supportedEquipment)}");
 ConnectionFactory factory = new ConnectionFactory();
 factory.UserName = "guest";
@@ -21,8 +23,11 @@ factory.HostName = "localhost";
 
 IConnection conn = await factory.CreateConnectionAsync();
 IChannel channel = await conn.CreateChannelAsync();
+
+//kanał z klientem
 await channel.ExchangeDeclareAsync("orders_exchange", ExchangeType.Direct);
 
+//kanałna admin log
 await channel.ExchangeDeclareAsync("admin_log", ExchangeType.Fanout);
 
 await channel.BasicQosAsync(0, 1, false);
@@ -49,8 +54,7 @@ foreach (var eq in supportedEquipment)
 
     await channel.QueueDeclareAsync(queueName, durable: false, exclusive: false, autoDelete: false);
     await channel.QueueBindAsync(queue: queueName, exchange: "orders_exchange", routingKey: eq);
-
-    // Dla każdego sprzętu – osobny konsument
+    
     var consumer = new AsyncEventingBasicConsumer(channel);
     consumer.ReceivedAsync += async (model, ea) =>
     {
@@ -66,16 +70,25 @@ foreach (var eq in supportedEquipment)
 
         var confirmation = new ConfirmationMessage
         {
-            OrderId = Guid.NewGuid().ToString().Substring(0, 6),
+            OrderId = order.OrderId,
             Equipment = order.Equipment,
             SupplierName = supplierName,
             TeamName = order.TeamName
         };
+        var adminLog = new AdminLogMessage
+        {
+            Equipment = order.Equipment,
+            Reason = "Confirmation",
+            Sender = supplierName,
+            Target = order.TeamName,
+            OrderId = order.OrderId
+        };
 
         var confirmBody = SerializationHelper.Serialize(confirmation);
+        var adminLogBody = SerializationHelper.Serialize(adminLog);
 
         await channel.BasicPublishAsync(exchange: "", routingKey: $"team.{order.TeamName}", body: confirmBody);
-        await channel.BasicPublishAsync(exchange: "admin_log", routingKey: "", body: confirmBody);
+        await channel.BasicPublishAsync(exchange: "admin_log", routingKey: "", body: adminLogBody);
         await channel.BasicAckAsync(ea.DeliveryTag, false);
     };
 

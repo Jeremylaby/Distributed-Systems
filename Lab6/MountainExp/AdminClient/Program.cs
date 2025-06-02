@@ -2,7 +2,6 @@
 using RabbitMQ.Client.Events;
 using Common;
 using Common.MessageModels; 
-using System.Text;
 
 Console.WriteLine("[ADMIN] Uruchomiono admina.");
 
@@ -14,6 +13,8 @@ factory.HostName = "localhost";
 
 IConnection conn = await factory.CreateConnectionAsync();
 IChannel channel = await conn.CreateChannelAsync();
+
+
 await channel.ExchangeDeclareAsync("admin_log", ExchangeType.Fanout);
 
 await channel.ExchangeDeclareAsync("admin_exchange", ExchangeType.Direct);
@@ -28,9 +29,9 @@ var consumer = new AsyncEventingBasicConsumer(channel);
 consumer.ReceivedAsync += async (model, ea) =>
 {
     var body = ea.Body.ToArray();
-    var adminMsg = SerializationHelper.Deserialize<AdminMessage>(body);
+    var adminMsg = SerializationHelper.Deserialize<AdminLogMessage>(body);
     if (adminMsg != null)
-        Console.WriteLine($"[ADMIN] LOG: {adminMsg.Content} (do: {adminMsg.Target})");
+        Console.WriteLine($"[ADMIN] LOG: orderId: {adminMsg.OrderId} from {adminMsg.Sender} to: {adminMsg.Target} reason: {adminMsg.Reason} equipment: {adminMsg.Equipment} ");
     else
         Console.WriteLine("[ADMIN] Otrzymano nieprawidłową wiadomość.");
     await channel.BasicAckAsync(ea.DeliveryTag, false);
